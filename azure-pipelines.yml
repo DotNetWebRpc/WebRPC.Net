@@ -1,8 +1,5 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
+name: $(BuildDefinitionName)_1.0$(Rev:.r)
+  
 trigger:
 - main
 
@@ -13,24 +10,42 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  Major: '1'
-  Minor: '0'
-  Patch: '0'
 
 steps:
 
 - task: DotNetCoreCLI@2
-  displayName: "Pack"
+  inputs:
+    command: 'build'
+    projects: 'src/abstractions/abstractions.csprj'
+    arguments: '-c $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'src/client/client.csprj'
+    arguments: '-c $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'src/host/host.csprj'
+    arguments: '-c $(buildConfiguration)'
+- task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: '**/*.csproj'
-    versioningScheme: byPrereleaseNumber
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
-- task: DotNetCoreCLI@2
-  displayName: "Publish"
+    packagesToPack: '**/abstractions.nuspec'
+    versioningScheme: 'byBuildNumber'
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/client.nuspec'
+    versioningScheme: 'byBuildNumber'
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/host.nuspec'
+    versioningScheme: 'byBuildNumber'
+- task: NuGetCommand@2
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    publishVstsFeed: 'd09fc...'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'f9ed18cb-f0f4-4034-80ce-a9fff62b78ef'
