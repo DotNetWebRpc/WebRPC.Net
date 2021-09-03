@@ -10,16 +10,23 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  Major: '1'
-  Minor: '0'
-  Patch: '0'
 
 steps:
 
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: '**/*.csproj'
+    packagesToPack: '/build/abstractions.nuspec'
+    versioningScheme: 'byBuildNumber'
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '/build/client.nuspec'
+    versioningScheme: 'byBuildNumber'
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '/build/host.nuspec'
     versioningScheme: 'byBuildNumber'
 - task: NuGetCommand@2
   inputs:
