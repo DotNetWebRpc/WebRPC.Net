@@ -1,4 +1,4 @@
-name: $(BuildDefinitionName)_1.0.$(Rev:.rr)
+name: $(BuildDefinitionName)_1.0$(Rev:.r)
   
 trigger:
 - main
