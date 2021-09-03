@@ -13,6 +13,21 @@ variables:
 
 steps:
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'src/abstractions/abstractions.csprj'
+    arguments: '-c $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'src/client/client.csprj'
+    arguments: '-c $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'src/host/host.csprj'
+    arguments: '-c $(buildConfiguration)'
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
