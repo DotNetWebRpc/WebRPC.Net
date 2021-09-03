@@ -19,18 +19,14 @@ variables:
 
 steps:
 
-- task: DotNetCoreCLI@2
-  displayName: "Pack"
+- task: NuGetCommand@2
   inputs:
     command: 'pack'
     packagesToPack: '**/*.csproj'
-    versioningScheme: byPrereleaseNumber
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
-- task: DotNetCoreCLI@2
-  displayName: "Publish"
+    versioningScheme: 'byBuildNumber'
+- task: NuGetCommand@2
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    publishVstsFeed: 'd09fc...'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'f9ed18cb-f0f4-4034-80ce-a9fff62b78ef'
