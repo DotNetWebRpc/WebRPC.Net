@@ -16,17 +16,17 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: '/build/abstractions.nuspec'
+    packagesToPack: '**/abstractions.nuspec'
     versioningScheme: 'byBuildNumber'
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: '/build/client.nuspec'
+    packagesToPack: '**/client.nuspec'
     versioningScheme: 'byBuildNumber'
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: '/build/host.nuspec'
+    packagesToPack: '**/host.nuspec'
     versioningScheme: 'byBuildNumber'
 - task: NuGetCommand@2
   inputs:
