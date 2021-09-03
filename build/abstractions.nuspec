@@ -31,14 +31,14 @@
   <files>
     <file src="icon.png" target="images\" />
 
-    <file src="..\src\WebRPC\Abstractions\bin\Release\net5.0\WebRPC.Abstractions.dll" target="lib\net5.0\WebRPC.Abstractions.dll" />
-    <file src="..\src\WebRPC\Abstractions\bin\Release\net5.0\WebRPC.Abstractions.pdb" target="lib\net5.0\WebRPC.Abstractions.pdb" />
+    <file src="..\src\Abstractions\bin\Release\net5.0\WebRPC.Abstractions.dll" target="lib\net5.0\WebRPC.Abstractions.dll" />
+    <file src="..\src\Abstractions\bin\Release\net5.0\WebRPC.Abstractions.pdb" target="lib\net5.0\WebRPC.Abstractions.pdb" />
 
-    <file src="..\src\WebRPC\Abstractions\bin\Release\netstandard2.0\WebRPC.Abstractions.dll" target="lib\netstandard2.0\WebRPC.Abstractions.dll" />
-    <file src="..\src\WebRPC\Abstractions\bin\Release\netstandard2.0\WebRPC.Abstractions.pdb" target="lib\netstandard2.0\WebRPC.Abstractions.pdb" />
+    <file src="..\src\Abstractions\bin\Release\netstandard2.0\WebRPC.Abstractions.dll" target="lib\netstandard2.0\WebRPC.Abstractions.dll" />
+    <file src="..\src\Abstractions\bin\Release\netstandard2.0\WebRPC.Abstractions.pdb" target="lib\netstandard2.0\WebRPC.Abstractions.pdb" />
 
-    <file src="..\src\WebRPC\Abstractions\bin\Release\netstandard2.1\WebRPC.Abstractions.dll" target="lib\netstandard2.1\WebRPC.Abstractions.dll" />
-    <file src="..\src\WebRPC\Abstractions\bin\Release\netstandard2.1\WebRPC.Abstractions.pdb" target="lib\netstandard2.1\WebRPC.Abstractions.pdb" />
+    <file src="..\src\Abstractions\bin\Release\netstandard2.1\WebRPC.Abstractions.dll" target="lib\netstandard2.1\WebRPC.Abstractions.dll" />
+    <file src="..\src\Abstractions\bin\Release\netstandard2.1\WebRPC.Abstractions.pdb" target="lib\netstandard2.1\WebRPC.Abstractions.pdb" />
 
   </files>
 </package>

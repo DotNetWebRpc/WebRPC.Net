@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
     <AssemblyName>WebRPC.Host</AssemblyName>
     <RootNamespace>WebRPC</RootNamespace>
-    <NuspecFile>..\..\..\build\host.nuspec</NuspecFile>
+    <NuspecFile>..\..\build\host.nuspec</NuspecFile>
     <NuspecProperties>version=$(PackageVersion)</NuspecProperties>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../KeyFile.snk</AssemblyOriginatorKeyFile>

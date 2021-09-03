@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
     <AssemblyName>WebRPC.Abstractions</AssemblyName>
     <RootNamespace>WebRPC</RootNamespace>
-    <NuspecFile>..\..\..\build\abstractions.nuspec</NuspecFile>
+    <NuspecFile>..\..\build\abstractions.nuspec</NuspecFile>
     <NuspecProperties>version=$(PackageVersion)</NuspecProperties>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../KeyFile.snk</AssemblyOriginatorKeyFile>

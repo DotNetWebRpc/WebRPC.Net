@@ -17,14 +17,36 @@
       <group targetFramework="net5.0">
         <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.2" />
         <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="5.0" />
-        <dependency id="Microsoft.CSharp" version="4.5" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="5.0" />
+        <dependency id="Microsoft.CSharp" version="4.7" />
+        <dependency id="WebRPC.Abstractions" version="$version$" />
+      </group>
+      <group targetFramework="netstandard2.0">
+        <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.2" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="2.2" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="2.2" />
+        <dependency id="Microsoft.CSharp" version="4.7" />
+        <dependency id="WebRPC.Abstractions" version="$version$" />
+      </group>
+      <group targetFramework="netstandard2.1">
+        <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.2" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="3.1" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="3.1" />
+        <dependency id="Microsoft.CSharp" version="4.7" />
         <dependency id="WebRPC.Abstractions" version="$version$" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="icon.png" target="images\" />
-    <file src="..\src\WebRPC\Host\bin\Release\net5.0\WebRPC.Host.dll" target="lib\net5.0\WebRPC.Host.dll" />
-    <file src="..\src\WebRPC\Host\bin\Release\net5.0\WebRPC.Host.pdb" target="lib\net5.0\WebRPC.Host.pdb" />
+    <file src="..\src\Host\bin\Release\net5.0\WebRPC.Host.dll" target="lib\net5.0\WebRPC.Host.dll" />
+    <file src="..\src\Host\bin\Release\net5.0\WebRPC.Host.pdb" target="lib\net5.0\WebRPC.Host.pdb" />
+
+    <file src="..\src\Host\bin\Release\net5.0\WebRPC.Host.dll" target="lib\netstandard2.0\WebRPC.Host.dll" />
+    <file src="..\src\Host\bin\Release\net5.0\WebRPC.Host.pdb" target="lib\netstandard2.0\WebRPC.Host.pdb" />
+
+    <file src="..\src\Host\bin\Release\net5.0\WebRPC.Host.dll" target="lib\netstandard2.1\WebRPC.Host.dll" />
+    <file src="..\src\Host\bin\Release\net5.0\WebRPC.Host.pdb" target="lib\netstandard2.1\WebRPC.Host.pdb" />
+
   </files>
 </package>

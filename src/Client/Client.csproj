@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>WebRPC.Client</AssemblyName>
     <RootNamespace>WebRPC</RootNamespace>
-    <NuspecFile>..\..\..\build\client.nuspec</NuspecFile>
+    <NuspecFile>..\..\build\client.nuspec</NuspecFile>
     <NuspecProperties>version=$(PackageVersion)</NuspecProperties>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SignAssembly>true</SignAssembly>
