@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebRPC.Host
+namespace WebRPC
 {
     internal class Routes : Dictionary<string, ApplicationRoute>, IRoutes
     {

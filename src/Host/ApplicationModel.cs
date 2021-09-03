@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebRPC.Host
+namespace WebRPC
 {
     public class ApplicationModel
     {

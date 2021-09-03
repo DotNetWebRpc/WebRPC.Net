@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using WebRPC.Host;
+using WebRPC;
 using System;
 
 namespace Microsoft.Extensions.DependencyInjection

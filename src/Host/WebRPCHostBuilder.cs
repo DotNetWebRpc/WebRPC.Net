@@ -2,28 +2,30 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebRPC.Host
+namespace WebRPC
 {
     public class WebRPCHostBuilder
     {
         private readonly IServiceCollection _services;
         public IRoutes Routes { get; set; }
+
         public WebRPCHostBuilder(IServiceCollection services)
         {
             _services = services;
             Routes = new Routes();
         }
+
         public void AddInterface<TService, TImplementation>() where TService : class
             where TImplementation : class, TService
         {
-            string route = typeof(TService).FullName;
             _services.AddScoped<TService, TImplementation>();
-            Routes.Add(route, CreateRoute<TService>());
+            Routes.Add(typeof(TService).FullName, CreateRoute<TService>());
         }
 
         private ApplicationRoute CreateRoute<T>()
@@ -32,16 +34,19 @@ namespace WebRPC.Host
             {
                 InterfaceType = typeof(T)
             };
+
             var methodCaches = new Dictionary<string, MethodCache>();
+
             foreach (var method in route.InterfaceType.GetMethods())
             {
+                var parameters = new List<ApplicationModel>();
                 var id = CreateId(Guid.NewGuid().ToString(), method);
+
                 var methodCache = new MethodCache()
                 {
                     Method = method,
                     IsAsync = method.ReturnType.GetMethod(nameof(Task.GetAwaiter)) != null
                 };
-                List<ApplicationModel> parameters = new List<ApplicationModel>();
 
                 foreach (var parameter in method.GetParameters())
                 {
@@ -53,13 +58,16 @@ namespace WebRPC.Host
                         IsByRef = parameter.ParameterType.IsByRef
                     });
                 }
+
                 methodCache.Parameters = parameters.ToArray();
                 methodCaches.Add(id, methodCache);
             }
+
             route.Methods = new ReadOnlyDictionary<string, MethodCache>(methodCaches);
 
             return route;
         }
+
         public string CreateId(string key, MethodBase m)
         {
             if (m == null)
@@ -77,22 +85,15 @@ namespace WebRPC.Host
             }
             throw new Exception("Method Information is not a Method: " + m.Name);
         }
+
         private string CalculateHash(MethodInfo methodInfo)
         {
             Type returnType = methodInfo.ReturnType;
             ParameterInfo[] parameters = methodInfo.GetParameters();
 
             StringBuilder ret = new StringBuilder();
-            ret.Append(methodInfo.Name + ":");
-
-            if (returnType == typeof(void))
-            {
-                ret.Append("void");
-            }
-            else
-            {
-                ret.Append(returnType.FullName);
-            }
+            ret.Append(methodInfo.Name + ":")
+               .Append(GetName(returnType));
 
             foreach (var parameter in parameters)
             {
@@ -109,11 +110,37 @@ namespace WebRPC.Host
                     ret.Append("|-");
                 }
 
-                ret.Append(parameter.ParameterType.FullName);
+                ret.Append(GetName(parameter.ParameterType));
             }
 
             return ret.ToString();
         }
+
+        private string GetName(Type type)
+        {
+            if (type == typeof(void))
+            {
+                return "void";
+            }
+            else if (type.IsGenericType && type.IsInterface)
+            {
+                string subTypes = string.Join(",", type.GenericTypeArguments.Select(t => GetName(t)));
+                int num = type.GenericTypeArguments.Length;
+
+                return $"{type.Namespace}.{type.Name.Replace("`" + num, "")}<{subTypes}>";
+            }
+            else if (type.IsGenericType && !type.IsInterface)
+            {
+                string subTypes = string.Join(",", type.GenericTypeArguments.Select(t => GetName(t)));
+
+                return $"{GetName(type.BaseType)}<{subTypes}>";
+            }
+            else
+            {
+                return type.FullName;
+            }
+        }
+
         private string Hash(string text)
         {
             using (var sha = SHA256.Create())

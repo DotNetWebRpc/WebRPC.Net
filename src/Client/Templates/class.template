@@ -1,0 +1,72 @@
+﻿{Imports}
+
+namespace {Namespace}
+{
+    partial class {ClassName} : {InterfaceName}
+    {
+        private readonly string _handler;
+        private readonly HttpClient _client;
+        private readonly Dictionary<int, string> _ids;
+
+        public {ClassName}(HttpClient client)
+        {
+            _handler = typeof({InterfaceName}).FullName;
+            _client = client;
+            _ids = new Dictionary<int, string>();
+        }
+
+        public Response MakeRequest(string id, string name, params object[] content)
+        {
+            return MakeRequestAsync(id, name, content).GetAwaiter().GetResult();
+        }
+        public async Task<Response> MakeRequestAsync(string id, string name, params object[] content)
+        {
+            var requestUri = name;
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
+            {
+                Content = new MessagePackContent(content)
+            };
+
+            request.Headers.Add("X-MethodSignature", id);
+            request.Headers.Add("X-MethodHandler", _handler);
+
+            var httpResponse = await _client.SendAsync(request);
+
+            switch (httpResponse.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                    return new Response(new MessagePackStreamReader(await httpResponse.Content.ReadAsStreamAsync()));
+                case HttpStatusCode.NotFound:
+                    throw new RPCException("Not Found: " + requestUri, null);
+                case HttpStatusCode.InternalServerError:
+                    throw await CreateExceptionAsync<Exception>(httpResponse);
+                default:
+                    throw await CreateExceptionAsync<Exception>(httpResponse);
+            }
+        }
+        private async Task<Exception> CreateExceptionAsync<X>(HttpResponseMessage response) where X : Exception
+        {
+            try
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    return MessagePackSerializer.Deserialize<X>(await response.Content.ReadAsStreamAsync(), ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));
+                }
+                else
+                {
+                    return new Exception("Unknown response: " + await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception ex)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return new RPCException("Could not parse rpc exception", ex)
+                {
+                    Source = json
+                };
+            }
+        }
+
+{Methods}
+    }
+}

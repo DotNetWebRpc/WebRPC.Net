@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>WebRPC.Host</id>
+    <version>$version$</version>
+    <title>WebRPC Host</title>
+    <authors>DotNet Web RPC</authors>
+    <owners>DotNet Web RPC</owners>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/DotNetWebRpc/WebRPC.Net</projectUrl>
+    <icon>images\icon.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A modern api for .net remoting</description>
+    <releaseNotes></releaseNotes>
+    <tags>WebApi RPC Remoting</tags>
+    <dependencies>
+      <group targetFramework="net5.0">
+        <dependency id="Microsoft.AspNetCore.Http.Abstractions" version="2.2" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="5.0" />
+        <dependency id="Microsoft.CSharp" version="4.5" />
+        <dependency id="WebRPC.Abstractions" version="$version$" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="icon.png" target="images\" />
+    <file src="..\src\WebRPC\Host\bin\Release\net5.0\WebRPC.Host.dll" target="lib\net5.0\WebRPC.Host.dll" />
+    <file src="..\src\WebRPC\Host\bin\Release\net5.0\WebRPC.Host.pdb" target="lib\net5.0\WebRPC.Host.pdb" />
+  </files>
+</package>

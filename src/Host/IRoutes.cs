@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebRPC.Host
+namespace WebRPC
 {
     public interface IRoutes : IDictionary<string, ApplicationRoute>
     {

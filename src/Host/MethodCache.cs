@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace WebRPC.Host
+namespace WebRPC
 {
     public class MethodCache
     {

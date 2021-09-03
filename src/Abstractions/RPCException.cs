@@ -13,8 +13,4 @@ namespace WebRPC
         {
         }
     }
-
-    public class ValidationException : Exception
-    {
-    }
 }
