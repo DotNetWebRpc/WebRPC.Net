@@ -14,22 +14,24 @@ variables:
 steps:
 
 - task: UseDotNet@2
-  displayName: 'Use .NET Core sdk'
+  displayName: 'Install .NET Core SDK'
   inputs:
-    packageType: sdk
-    version: 5.0.400
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+    version: '5.0.x'
 - task: DotNetCoreCLI@2
+  
+  displayName: 'Build Abstractions'
   inputs:
     command: 'build'
     projects: 'src/abstractions/abstractions.csprj'
     arguments: '-c $(buildConfiguration)'
 - task: DotNetCoreCLI@2
+  displayName: 'Build Client'
   inputs:
     command: 'build'
     projects: 'src/client/client.csprj'
     arguments: '-c $(buildConfiguration)'
 - task: DotNetCoreCLI@2
+  displayName: 'Build Host'
   inputs:
     command: 'build'
     projects: 'src/host/host.csprj'
