@@ -45,3 +45,8 @@ steps:
     command: 'pack'
     packagesToPack: '**/host.nuspec'
     versioningScheme: 'byBuildNumber'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
