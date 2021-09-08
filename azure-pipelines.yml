@@ -13,11 +13,11 @@ variables:
 
 steps:
 
-- task: DotNetCoreCLI@2
+- task: xDotNetCoreCLI@2
   
   displayName: 'Build'
   inputs:
-    command: 'xbuild'
+    command: 'build'
     projects: |
       src/abstractions/abstractions.csproj
       src/client/client.csproj
