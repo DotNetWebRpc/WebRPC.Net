@@ -42,6 +42,8 @@ steps:
     command: 'pack'
     packagesToPack: '**/host.nuspec'
     versioningScheme: 'byBuildNumber'
+- task: NuGetAuthenticate@0
+  displayName: 'NuGet Authenticate'
 - task: NuGetCommand@2
   inputs:
     command: 'push'
