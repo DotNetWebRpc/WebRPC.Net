@@ -13,7 +13,7 @@ variables:
 
 steps:
 
-- task: xDotNetCoreCLI@2
+- task: xxDotNetCoreCLI@2
   
   displayName: 'Build'
   inputs:
