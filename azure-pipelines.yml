@@ -13,7 +13,7 @@ variables:
 
 steps:
 
-- task: UseDotNet@2
+- task: xUseDotNet@2
   displayName: 'Install .NET Core SDK'
   inputs:
     version: '5.0.x'
