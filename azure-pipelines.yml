@@ -28,25 +28,20 @@ steps:
       src/host/host.csproj
     arguments: '-c $(buildConfiguration)'
 - task: NuGetCommand@2
+  displayName: 'Pack Abstractions'
   inputs:
     command: 'pack'
     packagesToPack: '**/abstractions.nuspec'
     versioningScheme: 'byBuildNumber'
 - task: NuGetCommand@2
+  displayName: 'Pack Client'
   inputs:
     command: 'pack'
     packagesToPack: '**/client.nuspec'
     versioningScheme: 'byBuildNumber'
 - task: NuGetCommand@2
+  displayName: 'Pack Host'
   inputs:
     command: 'pack'
     packagesToPack: '**/host.nuspec'
     versioningScheme: 'byBuildNumber'
-- task: NuGetAuthenticate@0
-  displayName: 'NuGet Authenticate'
-- task: NuGetCommand@2
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'f9ed18cb-f0f4-4034-80ce-a9fff62b78ef'
