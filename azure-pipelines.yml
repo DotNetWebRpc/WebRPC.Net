@@ -14,38 +14,35 @@ variables:
 steps:
 
 - task: DotNetCoreCLI@2
+  
+  displayName: 'Build'
   inputs:
     command: 'build'
-    projects: 'src/abstractions/abstractions.csprj'
-    arguments: '-c $(buildConfiguration)'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: 'src/client/client.csprj'
-    arguments: '-c $(buildConfiguration)'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: 'src/host/host.csprj'
+    projects: |
+      src/abstractions/abstractions.csproj
+      src/client/client.csproj
+      src/host/host.csproj
     arguments: '-c $(buildConfiguration)'
 - task: NuGetCommand@2
+  displayName: 'Pack Abstractions'
   inputs:
     command: 'pack'
     packagesToPack: '**/abstractions.nuspec'
     versioningScheme: 'byBuildNumber'
 - task: NuGetCommand@2
+  displayName: 'Pack Client'
   inputs:
     command: 'pack'
     packagesToPack: '**/client.nuspec'
     versioningScheme: 'byBuildNumber'
 - task: NuGetCommand@2
+  displayName: 'Pack Host'
   inputs:
     command: 'pack'
     packagesToPack: '**/host.nuspec'
     versioningScheme: 'byBuildNumber'
-- task: NuGetCommand@2
+- task: PublishBuildArtifacts@1
   inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'f9ed18cb-f0f4-4034-80ce-a9fff62b78ef'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
