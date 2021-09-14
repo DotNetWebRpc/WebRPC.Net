@@ -16,15 +16,15 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="Microsoft.Extensions.Http" version="2.2.0" />
-        <dependency id="MessagePack" version="2.2.85" />
+        <dependency id="MessagePack" version="2.3.75" />
       </group>
       <group targetFramework="netstandard2.1">
         <dependency id="Microsoft.Extensions.Http" version="3.1.0" />
-        <dependency id="MessagePack" version="2.2.85" />
+        <dependency id="MessagePack" version="2.3.75" />
       </group>
       <group targetFramework="net5.0">
         <dependency id="Microsoft.Extensions.Http" version="5.0" />
-        <dependency id="MessagePack" version="2.2.85" />
+        <dependency id="MessagePack" version="2.3.75" />
       </group>
     </dependencies>
   </metadata>
