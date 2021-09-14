@@ -21,8 +21,7 @@ steps:
       src/abstractions/abstractions.csproj
       src/client/client.csproj
       src/host/host.csproj
-    arguments: '-c $(buildConfiguration)'
-    versioningScheme: 'byBuildNumber'
+    arguments: '-c $(buildConfiguration) /p:Version=$(Build.BuildNumber)'
 - task: NuGetCommand@2
   displayName: 'Pack Abstractions'
   inputs:
