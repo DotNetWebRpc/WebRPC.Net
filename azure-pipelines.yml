@@ -10,6 +10,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  version: 1.0$(Rev:.r)
 
 
 steps:
@@ -21,7 +22,7 @@ steps:
       src/abstractions/abstractions.csproj
       src/client/client.csproj
       src/host/host.csproj
-    arguments: '-c $(buildConfiguration) /p:Version=1.0$(Rev:.r)'
+    arguments: '-c $(buildConfiguration) /p:Version=$(version)'
 - task: NuGetCommand@2
   displayName: 'Pack Abstractions'
   inputs:
