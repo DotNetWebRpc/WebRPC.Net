@@ -15,36 +15,3 @@ variables:
 
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: 'Build'
-  inputs:
-    command: 'build'
-    projects: |
-      src/abstractions/abstractions.csproj
-      src/client/client.csproj
-      src/host/host.csproj
-    arguments: '-c $(buildConfiguration) /p:Version=$(majorMinorVersion).$(semanticVersion)'
-- task: NuGetCommand@2
-  displayName: 'Pack Abstractions'
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/abstractions.nuspec'
-    versioningScheme: 'byBuildNumber'
-- task: NuGetCommand@2
-  displayName: 'Pack Client'
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/client.nuspec'
-    versioningScheme: 'byBuildNumber'
-- task: NuGetCommand@2
-  displayName: 'Pack Host'
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/host.nuspec'
-    versioningScheme: 'byBuildNumber'
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-    
