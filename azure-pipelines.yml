@@ -20,7 +20,7 @@ steps:
       src/abstractions/abstractions.csproj
       src/client/client.csproj
       src/host/host.csproj
-    arguments: '-c $(buildConfiguration) /p:Version=$(PackageVersion)'
+    arguments: '-c $(buildConfiguration) /p:Version=1.0$(Rev:.r)'
 - task: NuGetCommand@2
   displayName: 'Pack Abstractions'
   inputs:
