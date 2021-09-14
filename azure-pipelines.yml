@@ -16,6 +16,14 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'Restore'
+  inputs:
+    command: 'restore'
+    projects: |
+      src/abstractions/abstractions.csproj
+      src/client/client.csproj
+      src/host/host.csproj
+- task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
     command: 'build'
