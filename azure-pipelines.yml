@@ -1,4 +1,4 @@
-name: $(BuildDefinitionName)_1.0$(Rev:.r)
+name: $(majorMinorVersion).$(semanticVersion)
   
 trigger:
 - main
@@ -7,10 +7,11 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
+  majorMinorVersion: 1.0
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: 1.0$(Rev:.r)
+  semanticVersion: $[counter(variables['majorMinorVersion'], 0)]
 
 
 steps:
