@@ -1,4 +1,4 @@
-name: $(BuildDefinitionName)_1.0$(Rev:.r)
+name: $(majorMinorVersion).$(semanticVersion)
   
 trigger:
 - main
@@ -7,14 +7,23 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
+  majorMinorVersion: 1.1
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  semanticVersion: $[counter(variables['majorMinorVersion'], 0)]
+
 
 steps:
-
 - task: DotNetCoreCLI@2
-  
+  displayName: 'Restore'
+  inputs:
+    command: 'restore'
+    projects: |
+      src/abstractions/abstractions.csproj
+      src/client/client.csproj
+      src/host/host.csproj
+- task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
     command: 'build'
@@ -22,7 +31,7 @@ steps:
       src/abstractions/abstractions.csproj
       src/client/client.csproj
       src/host/host.csproj
-    arguments: '-c $(buildConfiguration)'
+    arguments: '-c $(buildConfiguration) /p:Version=$(majorMinorVersion).$(semanticVersion)'
 - task: NuGetCommand@2
   displayName: 'Pack Abstractions'
   inputs:
@@ -46,3 +55,4 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+    
