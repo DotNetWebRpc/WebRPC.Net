@@ -17,16 +17,17 @@ namespace WebRPC
     {
         private readonly List<string> imports = new List<string>
         {
-            "using System.Collections.Generic;",
             "using System;",
-            "using System.Threading.Tasks;",
-            "using System.Net.Http;",
+            "using System.Collections.Generic;",
+            "using System.IO;",
             "using System.Reflection;",
-            "using MessagePack;",
-            "using System.Net;",
-            "using MessagePack.Resolvers;",
             "using System.Security.Cryptography;",
             "using System.Text;",
+            "using System.Threading.Tasks;",
+            "using System.Net;",
+            "using System.Net.Http;",
+            "using MessagePack;",
+            "using MessagePack.Resolvers;",
             "using WebRPC;"
         };
 

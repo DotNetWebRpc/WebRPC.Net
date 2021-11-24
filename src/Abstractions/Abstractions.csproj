@@ -9,21 +9,20 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../KeyFile.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <Version>$(PackageVersion)</Version>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
-    <PackageReference Include="MessagePack" Version="2.3.75" />
+    <PackageReference Include="MessagePack" Version="2.3.85" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.16" />
-    <PackageReference Include="MessagePack" Version="2.3.75" />
+    <PackageReference Include="MessagePack" Version="2.3.85" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
-    <PackageReference Include="MessagePack" Version="2.3.75" />
+    <PackageReference Include="MessagePack" Version="2.3.85" />
   </ItemGroup>
 </Project>

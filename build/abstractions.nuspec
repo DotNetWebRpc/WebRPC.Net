@@ -16,20 +16,27 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="Microsoft.Extensions.Http" version="2.2.0" />
-        <dependency id="MessagePack" version="2.2.85" />
+        <dependency id="MessagePack" version="2.3.85" />
       </group>
       <group targetFramework="netstandard2.1">
         <dependency id="Microsoft.Extensions.Http" version="3.1.0" />
-        <dependency id="MessagePack" version="2.2.85" />
+        <dependency id="MessagePack" version="2.3.85" />
       </group>
       <group targetFramework="net5.0">
         <dependency id="Microsoft.Extensions.Http" version="5.0" />
-        <dependency id="MessagePack" version="2.2.85" />
+        <dependency id="MessagePack" version="2.3.85" />
+      </group>
+      <group targetFramework="net6.0">
+        <dependency id="Microsoft.Extensions.Http" version="6.0" />
+        <dependency id="MessagePack" version="2.3.85" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="icon.png" target="images\" />
+
+    <file src="..\src\Abstractions\bin\Release\net6.0\WebRPC.Abstractions.dll" target="lib\net6.0\WebRPC.Abstractions.dll" />
+    <file src="..\src\Abstractions\bin\Release\net6.0\WebRPC.Abstractions.pdb" target="lib\net6.0\WebRPC.Abstractions.pdb" />
 
     <file src="..\src\Abstractions\bin\Release\net5.0\WebRPC.Abstractions.dll" target="lib\net5.0\WebRPC.Abstractions.dll" />
     <file src="..\src\Abstractions\bin\Release\net5.0\WebRPC.Abstractions.pdb" target="lib\net5.0\WebRPC.Abstractions.pdb" />

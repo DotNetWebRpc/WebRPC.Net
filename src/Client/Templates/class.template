@@ -17,7 +17,28 @@ namespace {Namespace}
 
         public Response MakeRequest(string id, string name, params object[] content)
         {
-            return MakeRequestAsync(id, name, content).GetAwaiter().GetResult();
+            var requestUri = name;
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
+            {
+                Content = new MessagePackContent(content)
+            };
+
+            request.Headers.Add("X-MethodSignature", id);
+            request.Headers.Add("X-MethodHandler", _handler);
+
+            var httpResponse = _client.Send(request);
+
+            switch (httpResponse.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                    return new Response(new MessagePackStreamReader(httpResponse.Content.ReadAsStream()));
+                case HttpStatusCode.NotFound:
+                    throw new RPCException("Not Found: " + requestUri, null);
+                case HttpStatusCode.InternalServerError:
+                    throw await CreateException<Exception>(httpResponse);
+                default:
+                    throw await CreateException<Exception>(httpResponse);
+            }
         }
         public async Task<Response> MakeRequestAsync(string id, string name, params object[] content)
         {
@@ -59,11 +80,38 @@ namespace {Namespace}
             }
             catch (Exception ex)
             {
-                var json = await response.Content.ReadAsStringAsync();
                 return new RPCException("Could not parse rpc exception", ex)
                 {
-                    Source = json
+                    Source = await response.Content.ReadAsStringAsync()
                 };
+            }
+        }
+        private Exception CreateException<X>(HttpResponseMessage response) where X : Exception
+        {
+            try
+            {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    return MessagePackSerializer.Deserialize<X>(response.Content.ReadAsStream(), ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));
+                }
+                else
+                {
+                    return new Exception("Unknown response: " + ReadContent(response));
+                }
+            }
+            catch (Exception ex)
+            {
+                return new RPCException("Could not parse rpc exception", ex)
+                {
+                    Source = ReadContent(response)
+                };
+            }
+        }
+        private string ReadContent(HttpResponseMessage response)
+        {
+            using(var reader = new StreamReader(response.Content.ReadAsStream()))
+            {
+                return reader.ReadAsString()
             }
         }
 
