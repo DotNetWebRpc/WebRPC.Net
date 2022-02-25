@@ -10,6 +10,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../KeyFile.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <IsRoslynComponent>true</IsRoslynComponent>
   </PropertyGroup>
 
   <ItemGroup>

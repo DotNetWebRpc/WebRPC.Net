@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Host", "Host\Host.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abstractions", "Abstractions\Abstractions.csproj", "{E1E4EE9D-3090-4687-B835-B7287BB31A26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{2EF785D4-D507-4535-A214-2AE37C17134E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{2EF785D4-D507-4535-A214-2AE37C17134E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
