@@ -81,7 +81,11 @@ namespace WebRPC
 
             if (m is MethodInfo mi)
             {
-                return Hash(CalculateHash(mi));
+                var methodString = CalculateHash(mi);
+                var hash = Hash(methodString);
+                Console.WriteLine(hash + "\t" + methodString);
+
+                return hash;
             }
             throw new Exception("Method Information is not a Method: " + m.Name);
         }
@@ -105,6 +109,10 @@ namespace WebRPC
                 {
                     ret.Append("|*");
                 }
+                else if (IsParams(parameter))
+                {
+                    ret.Append("|%");
+                }
                 else
                 {
                     ret.Append("|-");
@@ -115,29 +123,32 @@ namespace WebRPC
 
             return ret.ToString();
         }
-
+        private bool IsParams(ParameterInfo param)
+        {
+            return param.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
+        }
         private string GetName(Type type)
         {
             if (type == typeof(void))
             {
-                return "void";
+                return "System.Void";
             }
-            else if (type.IsGenericType && type.IsInterface)
+            else if (type.IsGenericType)
             {
                 string subTypes = string.Join(",", type.GenericTypeArguments.Select(t => GetName(t)));
                 int num = type.GenericTypeArguments.Length;
 
                 return $"{type.Namespace}.{type.Name.Replace("`" + num, "")}<{subTypes}>";
             }
-            else if (type.IsGenericType && !type.IsInterface)
-            {
-                string subTypes = string.Join(",", type.GenericTypeArguments.Select(t => GetName(t)));
+            //else if (type.IsGenericType && !type.IsInterface)
+            //{
+            //    string subTypes = string.Join(",", type.GenericTypeArguments.Select(t => GetName(t)));
 
-                return $"{GetName(type.BaseType)}<{subTypes}>";
-            }
+            //    return $"{GetName(type.BaseType)}<{subTypes}>";
+            //}
             else
             {
-                return type.FullName;
+                return type.FullName.Replace("&", "");
             }
         }
 

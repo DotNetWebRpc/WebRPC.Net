@@ -161,10 +161,11 @@ namespace WebRPC
                     StringBuilder parameters = new StringBuilder();
                     string methodName = methodSymbol.Name;
                     var returnType = methodSymbol.ReturnType.ToString().Trim();
-                    string id = Hash(CalculateHash(methodSymbol));
+                    string methodString = CalculateHash(methodSymbol);
+                    string id = Hash(methodString);
 
                     var isAsync = returnType.Contains("Task<");
-                    ret.AppendLine("        //" + CalculateHash(methodSymbol));
+                    ret.AppendLine("        //" + methodString);
 
                     parameters.Append(string.Join(", ", methodSymbol.Parameters.Select(p => $"{GetRefKind(p)}{p.Type.ToString().Trim()} {p.Name}")));
 
@@ -236,14 +237,7 @@ namespace WebRPC
             StringBuilder ret = new StringBuilder();
             ret.Append(methodSymbol.Name + ":");
 
-            if (methodSymbol.ReturnType == null)
-            {
-                ret.Append("void");
-            }
-            else
-            {
-                ret.Append(methodSymbol.ReturnType.ToString().Trim());
-            }
+            ret.Append(GetSymbolType(methodSymbol.ReturnType));
 
             foreach (var parameter in methodSymbol.Parameters)
             {
@@ -255,15 +249,51 @@ namespace WebRPC
                 {
                     ret.Append("|*");
                 }
+                else if (parameter.IsParams)
+                {
+                    ret.Append("|%");
+                }
                 else
                 {
                     ret.Append("|-");
                 }
 
-                ret.Append($"{parameter.Type.ContainingNamespace}.{parameter.Type.Name}");
+                ret.Append(GetSymbolType(parameter.Type));
             }
 
             return ret.ToString();
+        }
+        public string GetSymbolType(ITypeSymbol symbol)
+        {
+            StringBuilder ret = new StringBuilder();
+
+            if (symbol is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType)
+            {
+                ret.Append(GetTypeSymbolName(namedTypeSymbol))
+                   .Append("<")
+                   .Append(GetGenericParameterType(namedTypeSymbol))
+                   .Append(">");
+            }
+            else if (symbol is IArrayTypeSymbol arrayTypeSymbol)
+            {
+                ret.Append(GetTypeSymbolName(arrayTypeSymbol.ElementType))
+                   .Append("[]");
+
+            }
+            else
+                    {
+                ret.Append(GetTypeSymbolName(symbol));
+            }
+
+            return ret.ToString();
+        }
+        public string GetGenericParameterType(INamedTypeSymbol symbol)
+        {
+            return string.Join(", ", symbol.TypeArguments.Select(p => GetSymbolType(p)));
+        }
+        public string GetTypeSymbolName(ITypeSymbol symbol)
+        {
+            return $"{symbol.ContainingNamespace}.{symbol.Name.Trim()}";
         }
     }
 }
