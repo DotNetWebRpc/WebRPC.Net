@@ -32,6 +32,8 @@ steps:
       src/client/client.csproj
       src/host/host.csproj
     arguments: '-c $(buildConfiguration) /p:Version=$(majorMinorVersion).$(semanticVersion)'
+- task: NuGetToolInstaller@1
+  displayName: 'Nuget Update'
 - task: NuGetCommand@2
   displayName: 'Pack Abstractions'
   inputs:
