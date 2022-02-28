@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebRPC.Models
 {
-    public interface ITestService
+    public interface ISimpleService
     {
         void Simple();
         void Simple(bool b);
