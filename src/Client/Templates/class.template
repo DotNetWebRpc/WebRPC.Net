@@ -6,25 +6,23 @@ namespace {Namespace}
     {
         private readonly string _handler;
         private readonly HttpClient _client;
-        private readonly Dictionary<int, string> _ids;
 
         public {ClassName}(HttpClient client)
         {
             _handler = typeof({InterfaceName}).FullName;
             _client = client;
-            _ids = new Dictionary<int, string>();
         }
 
-        public Response MakeRequest(string id, string name, params object[] content)
+        public Response MakeRequest(string id, string name, Func<Stream, Task> action)
         {
-            return MakeRequestAsync(id, name, content).GetAwaiter().GetResult();
+            return MakeRequestAsync(id, name, action).GetAwaiter().GetResult();
         }
-        public async Task<Response> MakeRequestAsync(string id, string name, params object[] content)
+        public async Task<Response> MakeRequestAsync(string id, string name, Func<Stream, Task> action)
         {
             var requestUri = name;
             var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
             {
-                Content = new MessagePackContent(content)
+                Content = new MessagePackContent(action)
             };
 
             request.Headers.Add("X-MethodSignature", id);

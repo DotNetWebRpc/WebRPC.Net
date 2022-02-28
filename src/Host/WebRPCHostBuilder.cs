@@ -53,7 +53,7 @@ namespace WebRPC
                     parameters.Add(new ApplicationModel()
                     {
                         Name = parameter.Name,
-                        Type = parameter.ParameterType,
+                        Type = GetParameterType(parameter),
                         IsOut = parameter.IsOut,
                         IsByRef = parameter.ParameterType.IsByRef
                     });
@@ -66,6 +66,17 @@ namespace WebRPC
             route.Methods = new ReadOnlyDictionary<string, MethodCache>(methodCaches);
 
             return route;
+        }
+        private Type GetParameterType(ParameterInfo parameter)
+        {
+            if (parameter.ParameterType.IsByRef)
+            {
+                return parameter.ParameterType.GetElementType();
+            }
+            else
+            {
+                return parameter.ParameterType;
+            }
         }
 
         public string CreateId(string key, MethodBase m)

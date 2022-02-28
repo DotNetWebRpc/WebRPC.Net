@@ -153,7 +153,7 @@ namespace WebRPC
         private string GetMethods(INamedTypeSymbol type)
         {
             StringBuilder ret = new StringBuilder();
-            
+
             foreach (var member in type.GetMembers())
             {
                 if (member is IMethodSymbol methodSymbol)
@@ -163,6 +163,7 @@ namespace WebRPC
                     var returnType = methodSymbol.ReturnType.ToString().Trim();
                     string methodString = CalculateHash(methodSymbol);
                     string id = Hash(methodString);
+
 
                     var isAsync = returnType.Contains("Task<");
                     ret.AppendLine("        //" + methodString);
@@ -180,9 +181,15 @@ namespace WebRPC
                     var hasParams = objectString.Length > 0 ? "," : "";
 
                     string retText = null;
+                    ret.Append("                ").AppendLine(string.Join("\r\n                ", methodSymbol.Parameters.Where(p => !IsOut(p)).Select(p => $"var __local_refs__{p.Name} = {p.Name};")))
+                       .AppendLine("            Func<Stream, Task> serializer = async(stream) =>")
+                       .AppendLine("            {")
+                       .Append("                ").AppendLine(string.Join("\r\n                ", methodSymbol.Parameters.Where(p => !IsOut(p)).Select(p => $"await MessagePackSerializer.SerializeAsync(typeof({p.Type.ToString()}), stream, __local_refs__{p.Name}, ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));")))
+                       .AppendLine("            };");
+
                     if (isAsync)
                     {
-                        ret.AppendLine($"            using(var ____response = await MakeRequestAsync(\"{id}\", \"{methodName}\"{hasParams} {objectString}))")
+                        ret.AppendLine($"            using(var ____response = await MakeRequestAsync(\"{id}\", \"{methodName}\", serializer))")
                            .AppendLine($"            {{");
 
                         if (returnType != "void")
@@ -193,7 +200,7 @@ namespace WebRPC
                     }
                     else
                     {
-                        ret.AppendLine($"            using(var ____response = MakeRequest(\"{id}\", \"{methodName}\"{hasParams} {objectString}))")
+                        ret.AppendLine($"            using(var ____response = MakeRequest(\"{id}\", \"{methodName}\", serializer))")
                            .AppendLine($"            {{");
 
                         if (returnType != "void")
