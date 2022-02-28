@@ -169,9 +169,6 @@ namespace WebRPC
                     ret.AppendLine("        //" + methodString);
 
                     parameters.Append(string.Join(", ", methodSymbol.Parameters.Select(p => $"{GetRefKind(p)}{p.Type.ToString().Trim()} {p.Name}")));
-                    //retTypes.Append($"                [\"{id}\"] = new ContentInfo[] {{ ")
-                    //        .Append(string.Join(", ", methodSymbol.Parameters.Select(p => $"typeof({p.Type.ToString().Trim()})")))
-                    //        .AppendLine(" },");
 
                     string async_method = isAsync ? "async " : "";
 
@@ -182,22 +179,6 @@ namespace WebRPC
                     objectString.Append(string.Join(", ", methodSymbol.Parameters.Select(p => IsOut(p) ? "null" : p.Name)));
 
                     var hasParams = objectString.Length > 0 ? "," : "";
-
-                    /*
-for (int i = 0; i < _contents.Length; i++)
-{
-if (_contentInfos[i].IsOut)
-{
-await MessagePackSerializer.SerializeAsync(typeof(object), stream, null, ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));
-}
-else
-{
-await MessagePackSerializer.SerializeAsync(_contentInfos[i].Type, stream, _contents[i], ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));
-}
-}
-
- */
-
 
                     string retText = null;
                     ret.Append("                ").AppendLine(string.Join("\r\n                ", methodSymbol.Parameters.Where(p => !IsOut(p)).Select(p => $"var __local_refs__{p.Name} = {p.Name};")))
