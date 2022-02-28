@@ -180,11 +180,19 @@ namespace WebRPC
 
                     var hasParams = objectString.Length > 0 ? "," : "";
 
+                    string noserializer = "";
+                    if (!methodSymbol.Parameters.Any(p => !IsOut(p)))
+                    {
+                        noserializer = "                await Task.CompletedTask;";
+                    }
+
+
                     string retText = null;
-                    ret.Append("                ").AppendLine(string.Join("\r\n                ", methodSymbol.Parameters.Where(p => !IsOut(p)).Select(p => $"var __local_refs__{p.Name} = {p.Name};")))
+                    ret.Append("            ").AppendLine(string.Join("\r\n            ", methodSymbol.Parameters.Where(p => !IsOut(p)).Select(p => $"var __local_refs__{p.Name} = {p.Name};")))
                        .AppendLine("            Func<Stream, Task> serializer = async(stream) =>")
                        .AppendLine("            {")
                        .Append("                ").AppendLine(string.Join("\r\n                ", methodSymbol.Parameters.Where(p => !IsOut(p)).Select(p => $"await MessagePackSerializer.SerializeAsync(typeof({p.Type.ToString()}), stream, __local_refs__{p.Name}, ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));")))
+                       .AppendLine(noserializer)
                        .AppendLine("            };");
 
                     if (isAsync)
@@ -210,7 +218,7 @@ namespace WebRPC
                         }
                     }
 
-                    ret.Append(string.Join("\r\n", methodSymbol.Parameters.Where(p => IsOut(p) || IsByRef(p)).Select(p => $"            {p.Name} = ____response.Read<{p.Type.ToString()}>();")))
+                    ret.Append(string.Join("\r\n", methodSymbol.Parameters.Where(p => IsOut(p) || IsByRef(p)).Select(p => $"                {p.Name} = ____response.Read<{p.Type.ToString()}>();")))
                        .AppendLine();
 
                     if (retText != null)
