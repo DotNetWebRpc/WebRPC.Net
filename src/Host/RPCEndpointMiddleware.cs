@@ -74,7 +74,7 @@ namespace WebRPC
             {
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    if (await reader.ReadAsync(new System.Threading.CancellationToken()) is ReadOnlySequence<byte> msgpack)
+                    if (!parameters[i].IsOut && await reader.ReadAsync(new System.Threading.CancellationToken()) is ReadOnlySequence<byte> msgpack)
                     {
                         ret[i] = MessagePackSerializer.Deserialize(parameters[i].Type, msgpack, MessagePack.Resolvers.ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));
                     }

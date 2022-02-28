@@ -1,5 +1,6 @@
 ﻿using MessagePack;
 using MessagePack.Resolvers;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -9,18 +10,15 @@ namespace WebRPC
 {
     public class MessagePackContent : HttpContent
     {
-        private readonly object[] _content;
+        private readonly Func<Stream, Task> _action;
 
-        public MessagePackContent(object[] content)
+        public MessagePackContent(Func<Stream, Task> action)
         {
-            _content = content;
+            _action = action;
         }
         protected override async Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
-            for (int i = 0; i < _content.Length; i++)
-            {
-                await MessagePackSerializer.SerializeAsync(stream, _content[i], ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));
-            }
+            await _action(stream);
         }
 
         protected override bool TryComputeLength(out long length)
