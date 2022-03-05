@@ -6,5 +6,4 @@ namespace WebRPC.Models
     public partial class ComplexService
     {
     }
-
 }
