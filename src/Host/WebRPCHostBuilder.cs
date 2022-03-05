@@ -151,6 +151,7 @@ namespace WebRPC
 
                 return $"{type.Namespace}.{type.Name.Replace("`" + num, "")}<{subTypes}>";
             }
+            ///else if(type.IsValueType && Nullable.GetUnderlyingType(type) != null)
             //else if (type.IsGenericType && !type.IsInterface)
             //{
             //    string subTypes = string.Join(",", type.GenericTypeArguments.Select(t => GetName(t)));

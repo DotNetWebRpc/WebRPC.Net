@@ -52,8 +52,7 @@ namespace WebRPC
                     {
                         importBuilder.AppendLine(import);
                     }
-                    //importBuilder.AppendLine("using " + namespaceDeclarationSyntax.Name.ToString().Trim() + ";");
-
+                    
                     foreach (var import in namespaceDeclarationSyntax.Parent.DescendantNodes().OfType<UsingDirectiveSyntax>())
                     {
                         if (!imports.Contains(import.NormalizeWhitespace().ToString().Trim()))
@@ -71,9 +70,6 @@ namespace WebRPC
                                         .Replace("{InterfaceName}", @interface)
                                         .Replace("{Methods}", GetMethods(type));
 
-                    //source = type == null? "Not Found" : type.ToString();
-
-                    //File.WriteAllText($"C:\\JackHenry\\{Guid.NewGuid()}.cs", source);
                     context.AddSource(name + ".g.cs", SourceText.From(source, Encoding.UTF8));
                 }
             }

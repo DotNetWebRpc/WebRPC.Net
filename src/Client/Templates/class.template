@@ -15,7 +15,28 @@ namespace {Namespace}
 
         public Response MakeRequest(string id, string name, Func<Stream, Task> action)
         {
-            return MakeRequestAsync(id, name, action).GetAwaiter().GetResult();
+            var requestUri = name;
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri)
+            {
+                Content = new MessagePackContent(action)
+            };
+
+            request.Headers.Add("X-MethodSignature", id);
+            request.Headers.Add("X-MethodHandler", _handler);
+
+            var httpResponse = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            switch (httpResponse.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                    return new Response(new MessagePackStreamReader(httpResponse.Content.ReadAsStreamAsync().GetAwaiter().GetResult()));
+                case HttpStatusCode.NotFound:
+                    throw new RPCException("Not Found: " + requestUri, null);
+                case HttpStatusCode.InternalServerError:
+                    throw CreateExceptionAsync<Exception>(httpResponse).GetAwaiter().GetResult();
+                default:
+                    throw CreateExceptionAsync<Exception>(httpResponse).GetAwaiter().GetResult();
+            }
         }
         public async Task<Response> MakeRequestAsync(string id, string name, Func<Stream, Task> action)
         {
