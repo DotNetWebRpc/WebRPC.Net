@@ -161,7 +161,7 @@ namespace WebRPC
                     string id = Hash(methodString);
 
 
-                    var isAsync = returnType.Contains("Task<");
+                    var isAsync = returnType.StartsWith("System.Threading.Task");
                     ret.AppendLine("        //" + methodString);
 
                     parameters.Append(string.Join(", ", methodSymbol.Parameters.Select(p => $"{GetRefKind(p)}{p.Type.ToString().Trim()} {p.Name}")));
@@ -196,7 +196,7 @@ namespace WebRPC
                         ret.AppendLine($"            using(var ____response = await MakeRequestAsync(\"{id}\", \"{methodName}\", serializer))")
                            .AppendLine($"            {{");
 
-                        if (returnType != "void")
+                        if (returnType != "void" && returnType != "System.Threading.Tasks.Task")
                         {
                             ret.AppendLine($"                var ____ret = await ____response.ReadAsync<{returnType.Remove(returnType.Length - 1).Replace("System.Threading.Tasks.Task<", "")}>();");
                             retText = $"                return ____ret;";
