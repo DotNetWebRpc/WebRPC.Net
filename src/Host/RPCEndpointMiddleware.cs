@@ -51,7 +51,7 @@ namespace WebRPC
                             }
                             httpContext.Response.StatusCode = 200;
 
-                            await WriteResponseAsync(methodCache, httpContext.Response.Body, result);
+                            await WriteResponseAsync(methodCache, httpContext.Response.Body, result, parameters);
                             return;
                         }
                     }
@@ -83,7 +83,7 @@ namespace WebRPC
             return ret;
         }
 
-        private async Task WriteResponseAsync(MethodCache methodCache, Stream body, object result)
+        private async Task WriteResponseAsync(MethodCache methodCache, Stream body, object result, object[] parameters)
         {
             await MessagePackSerializer.SerializeAsync(body, result, MessagePack.Resolvers.ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));
 
@@ -91,7 +91,7 @@ namespace WebRPC
             {
                 if (methodCache.Parameters[i].IsByRef || methodCache.Parameters[i].IsOut)
                 {
-                    await MessagePackSerializer.SerializeAsync(body, result, MessagePack.Resolvers.ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));
+                    await MessagePackSerializer.SerializeAsync(body, parameters[i], MessagePack.Resolvers.ContractlessStandardResolver.Options.WithCompression(MessagePackCompression.Lz4BlockArray));
                 }
             }
         }
